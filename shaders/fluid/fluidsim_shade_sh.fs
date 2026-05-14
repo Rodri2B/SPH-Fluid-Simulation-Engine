@@ -1,0 +1,63 @@
+#version 460 core
+in vec3 vVelocity;
+in vec3 center_pos;
+in vec3 bPos;
+in float Radius;
+//in vec2 uv;
+out vec4 FragColor;
+
+float max_vel_display = 8.0;
+
+vec3 color1 = vec3(34,87,185)/255;
+vec3 color2 = vec3(76,255,144)/255;
+vec3 color3 = vec3(255,237,0)/255;
+vec3 color4 = vec3(234,73,8)/255;
+
+uniform bool render_vel_field = true;
+uniform bool render_as_circle = true;
+uniform vec3 fluid_color = vec3(34,87,185)/255;
+
+//uniform sampler2D uDepthTex;
+
+float near = -0.1;
+float far = -100.0;
+
+void main()
+{   
+    //vec3 color = vec3(0.0);
+
+    float sqrRadius = Radius*Radius;
+    vec3 dist_vec = bPos - center_pos;
+    float sqrdist = dot(dist_vec,dist_vec);
+
+    if(render_as_circle)
+        if(sqrdist > sqrRadius) discard;
+
+    float z = sqrt(sqrRadius - sqrdist);
+    vec3 frag_pos_3d = bPos+z*vec3(0.0,0.0,(bPos.z >=0 )?-1.0:1.0);
+
+    float depth = (1.0/frag_pos_3d.z - 1/near)/(1/far - 1/near);
+
+    //if(depth >= texture(uDepthTex, uv).r) discard;
+
+    if(depth > 1.0 || depth < 0.0) discard;
+
+    gl_FragDepth = depth;
+
+    //vec3 color = fluid_color;
+
+    vec3 color = normalize(frag_pos_3d-center_pos);
+
+    if(render_vel_field){
+        float velocity = length(vVelocity);
+        float t = max(0.0,min(velocity/max_vel_display,1.0));
+
+        if(0 <= t && t <0.062) color = color1;
+        if(0.062 <= t && t <0.506) color = mix(color1,color2,(t-0.062)/(0.506-0.062));
+        if(0.506 <= t && t <0.713) color = mix(color2,color3,(t-0.506)/(0.713-0.506));
+        if(0.713 <= t && t <= 1) color = mix(color3,color4,(t-0.713)/(1.0-0.713));
+    }
+
+    FragColor = vec4(color, 1.0);
+    //FragColor = vec4(0.0,0.0,1.0, 1.0);
+}

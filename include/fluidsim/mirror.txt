@@ -1,0 +1,33 @@
+/*
+            // tension
+
+            glm::vec3 posLocal = boundary_inverse_R * (pos - boundary_translation);
+
+            const glm::vec3 halfSize = 0.5f*boundary_scale;
+            const glm::vec3 edgeDst(
+                halfSize.x - std::abs(posLocal.x),
+                halfSize.y - std::abs(posLocal.y),
+                halfSize.z - std::abs(posLocal.z)
+            );
+            
+            if (edgeDst.x >= -FLT_MAX && edgeDst.x < fluid_h) {
+                
+                const float dst = 2.0f*edgeDst.x;
+
+                lapla_t += (particle_mass/particle.density)*poly6KernelLaplacian(dst);
+                
+            }
+            if (edgeDst.y >= -FLT_MAX && edgeDst.y < fluid_h) {
+                const float dst = 2.0f*edgeDst.y;
+
+                lapla_t += (particle_mass/particle.density)*poly6KernelLaplacian(dst);
+            }
+            if (edgeDst.z >= -FLT_MAX && edgeDst.z < fluid_h) {
+                const float dst = 2.0f*edgeDst.z;
+
+                lapla_t += (particle_mass/particle.density)*poly6KernelLaplacian(dst);              
+            }
+            }
+
+///////////////////
+*/
