@@ -1,1 +1,2 @@
 # SPH-Fluid-Simulation-Engine
+This is a simple SPH fluid simulation engine built for demonstration purposes. It is entirely built with C++, using OpenGL for rendering and relying on OpenMP to perform SPH computations. The SPH algorithm will soon be ported to compute shaders so the computations can be performed on the GPU. Moreover, this project used [Fluid-Sim](https://github.com/SebLague/Fluid-Sim.git) as a reference to build the algorithm and other object shaders.
